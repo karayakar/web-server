@@ -4,7 +4,7 @@
             <v-form v-if="selectable">
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-select v-model="selectedFolder" :items="folders" @change="loadDirectory" v-bind:label="`Select a folder`"></v-select>
+                        <v-select v-model="selectedFolder" :items="folderList" @change="loadDirectory" :label="`Select a folder`"></v-select>
                     </v-flex>
                 </v-layout>
             </v-form>
@@ -13,7 +13,7 @@
                     <v-container fluid>
                         <v-flex xs12>
                             <v-btn icon flat @click="goBack"><v-icon v-if="selectedFolder" class="mr-3">fas fa-arrow-left</v-icon></v-btn>
-                            {{ getFullPath }}
+                            {{ fullPath }}
                         </v-flex>
                     </v-container>
                 </v-layout>
@@ -87,15 +87,23 @@
             this.openDir();
         },
         computed: {
-            ...mapGetters({
-                myState: 'getAllState'
-            }),
-            getFullPath() {
-                let index = this.folders.findIndex(x => x.value === this.selectedFolder);
+            folderList() {
+                if (!Array.isArray(this.folders))
+                    return [];
+
+                let list = [];
+                for (let i = 0; i < this.folders.length; i++) {
+                    list.push({ text: this.folders[i], value: this.folders[i] });
+                }
+
+                return list;
+            },
+            fullPath() {
+                let index = this.folderList.findIndex(x => x.value === this.selectedFolder);
                 this.$_console_log(`[FileExplorer] GetFullPath: ${index}`);
                 if (index === -1)
                     return '';
-                let path = this.folders[index].text;
+                let path = this.folderList[index].text;
                 if (this.level === CONST.Roles.Level.Admin) {
                     //path += ':';
                     if (this.childDirNames.length === 0)

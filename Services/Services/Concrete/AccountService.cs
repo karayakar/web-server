@@ -56,15 +56,15 @@ namespace VueServer.Services.Concrete
             IUserService user
         )
         {
-            _antiForgery = forgery;
-            _config = config;
-            _env = env;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
-            _user = user;
-            _userContext = userContext;
-            _userManager = userManager;
-            _logger = logger.CreateLogger<AccountService>();
+            _antiForgery = forgery ?? throw new ArgumentNullException("Logger factory is null");
+            _config = config ?? throw new ArgumentNullException("Configuration is null");
+            _env = env ?? throw new ArgumentNullException("Hosting environment is null");
+            _roleManager = roleManager ?? throw new ArgumentNullException("Role manager is null");
+            _signInManager = signInManager ?? throw new ArgumentNullException("Signin manager is null");
+            _user = user ?? throw new ArgumentNullException("User service is null");
+            _userContext = userContext ?? throw new ArgumentNullException("User context is null");
+            _userManager = userManager ?? throw new ArgumentNullException("User manager is null");
+            _logger = logger?.CreateLogger<AccountService>() ?? throw new ArgumentNullException("Logger factory is null");
         }
 
         #region -> Public Functions 

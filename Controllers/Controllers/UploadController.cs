@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System;
 using System.Threading.Tasks;
 
 using VueServer.Common.Factory.Interface;
@@ -21,8 +21,8 @@ namespace VueServer.Controllers
             IUploadService service, 
             IStatusCodeFactory<IActionResult> codeFactory)
         {
-            _codeFactory = codeFactory;
-            _service = service;
+            _codeFactory = codeFactory ?? throw new ArgumentNullException("Code factory is null");
+            _service = service ?? throw new ArgumentNullException("Upload service is null");
         }
 
         [HttpGet]

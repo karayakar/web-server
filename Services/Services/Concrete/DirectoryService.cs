@@ -35,7 +35,7 @@ namespace VueServer.Services.Concrete
 
         public DirectoryService(ILoggerFactory logger, IUserService user, IHostingEnvironment env, IConfiguration config)
         {
-            _logger = logger.CreateLogger<DirectoryService>() ?? throw new ArgumentNullException("Logger null");
+            _logger = logger?.CreateLogger<DirectoryService>() ?? throw new ArgumentNullException("Logger null");
             _user = user ?? throw new ArgumentNullException("User service null");
             _env = env ?? throw new ArgumentNullException("Hosting environment null");
             _config = config ?? throw new ArgumentNullException("Configuration null");
@@ -208,16 +208,18 @@ namespace VueServer.Services.Concrete
             if (subDir != null)
                 path = Path.Combine(path, subDir);  // TODO: Check if this allows user to go backwards in path (SECURITY ISSUE)
 
+            FileSystemInfo[] files;
             try
             {
                 dir = new DirectoryInfo(path);
+                files = dir.GetFileSystemInfos();
             }
             catch (Exception)
             {
+                _logger.LogWarning($"Directory.Load: Error getting directory or file system info at: {path}");
                 return new Result<IOrderedEnumerable<WebServerFile>>(null, Common.Enums.StatusCode.BAD_REQUEST);
             }
 
-            var files = dir.GetFileSystemInfos();
             foreach (var file in files)
             {
                 fileList.Add(new WebServerFile(file));

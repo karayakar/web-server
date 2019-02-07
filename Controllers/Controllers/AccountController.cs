@@ -30,8 +30,8 @@ namespace VueServer.Controllers
             IStatusCodeFactory<IActionResult> factory
         )
         {
-            _service = service;
-            _codeFactory = factory;
+            _service = service ?? throw new ArgumentNullException("Account service is null");
+            _codeFactory = factory ?? throw new ArgumentNullException("Code factory is null");
         }
 
         #region -> Actions

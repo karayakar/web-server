@@ -124,17 +124,20 @@ namespace VueServer
             
             app.UseAuthentication();
             app.UseSession();
+
+            //app.UseDefaultFiles();
              
             // Exposes everything in the /dist folder where all our front-end files have been placed through webpack
             app.UseWebpackFileServer(env, logger);
 
             // Exposes everything in /videos folder for serving video files
-            // TODO: Make this optional. Have a settings in appsettings that can disable this.
-            // Some callback to the front-end to know to not expose the path for /videos would be useful if disabled.
-            app.UseVideoFileServer(env, logger);
+            // TODO: Some callback to the front-end to know to not expose the path for /videos would be useful if disabled.
+            if (Configuration.GetValue<bool>("Options:VideoFiles"))
+                app.UseVideoFileServer(env, logger);
 
             // Necessary for CertifyTheWeb to automatically re-authorize the webserver's TLS cert
-            app.UseAutoAuthorizerStaticFiles(env, logger);
+            if (Configuration.GetValue<bool>("Options:Well-Known"))
+                app.UseAutoAuthorizerStaticFiles(env, logger);
 
             app.Use(async (context, next) =>
             {

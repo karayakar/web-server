@@ -79,7 +79,8 @@ module.exports = (env) => {
 
                 {
                     test: /\.(sa|sc|c)ss$/,
-                    use: isDevBuild ? ['style-loader', 'css-loader'] : [
+                    //use: isDevBuild ? ['style-loader', 'css-loader'] : [
+					use: [
                             MiniCssExtractPlugin.loader,
                             'css-loader',
                             'sass-loader'

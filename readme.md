@@ -20,9 +20,15 @@ Dotnet core 2.2
 
 `appsettings.production.json`
 
-3. Since it's an SPA in development it is currently setup to run on port 7757 only. If you're running from the command line you'll need to either force the application to run on this port or find every instance of 7757 in the app and change to whatever you want to use. If using Visual Studio you can setup a profile in Properties/launchSettings.json to use port 7757.
+3. You might need to go into ./VueServer and run the following to get all the node package dependencies.
+
+`npm install`
+
+4. Since it's an SPA in development it is currently setup to run on port 7757 only. If you're running from the command line you'll need to either force the application to run on this port or find every instance of 7757 in the app and change to whatever you want to use. If using Visual Studio you can setup a profile in Properties/launchSettings.json to use port 7757.
 
 `dotnet run --urls https://localhost:7757`
+
+5. It has to be run in development for you to be able to register accounts. This feature is disabled in production.
 
 ### Required Software:
 

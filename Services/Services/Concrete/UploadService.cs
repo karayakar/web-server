@@ -26,9 +26,9 @@ namespace VueServer.Services.Concrete
 
         public UploadService (ILoggerFactory logger, IUserService user, IConfiguration config)
         {
-            _logger = logger.CreateLogger<UploadService>() ?? throw new ArgumentNullException("Logger null");
-            _user = user ?? throw new ArgumentNullException("User service null");
-            _config = config ?? throw new ArgumentNullException("Configuration null");
+            _logger = logger?.CreateLogger<UploadService>() ?? throw new ArgumentNullException("Logger factory is null");
+            _user = user ?? throw new ArgumentNullException("User service is null");
+            _config = config ?? throw new ArgumentNullException("Configuration is null");
         }
 
         public IResult<IEnumerable<string>> GetFolderList ()

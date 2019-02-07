@@ -23,9 +23,9 @@ namespace VueServer.Controllers
             IStatusCodeFactory<IActionResult> codeFactory,
             IFileServerService service)
         {
-            _env = env;
-            _codeFactory = codeFactory;
-            _service = service;
+            _env = env ?? throw new ArgumentNullException("Hosting environment is null");
+            _codeFactory = codeFactory ?? throw new ArgumentNullException("Status code factory is null");
+            _service = service ?? throw new ArgumentNullException("File server service is null");
         }
 
         [HttpGet]

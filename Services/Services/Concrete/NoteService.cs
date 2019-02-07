@@ -27,9 +27,9 @@ namespace VueServer.Services.Concrete
             IUserService user, 
             WSContext wsContext)
         {
-            _logger = logger.CreateLogger<NoteService>();
-            _user = user;
-            _wsContext = wsContext;
+            _logger = logger?.CreateLogger<NoteService>() ?? throw new ArgumentNullException("Logger factory is null");
+            _user = user ?? throw new ArgumentNullException("User service is null");
+            _wsContext = wsContext ?? throw new ArgumentNullException("Webserver context is null");
         }
 
         public async Task<IResult<List<Notes>>> GetAll()
@@ -45,12 +45,6 @@ namespace VueServer.Services.Concrete
 
         public async Task<IResult<List<Notes>>> Get()
         {
-            //var username = _user.GetUsername();
-            //if (string.IsNullOrWhiteSpace(username)) {
-            //    _logger.LogWarning("Notes.Get: No username contained in the HttpContext");
-            //    return BadRequest();
-            //}
-
             var notes = await _wsContext.Notes.Where(a => a.User == _user.Name).ToListAsync();
             if (notes == null || notes.Count == 0) {
                 _logger.LogInformation("[NoteService] Get: No notes found for current user");
@@ -67,12 +61,6 @@ namespace VueServer.Services.Concrete
                 _logger.LogWarning("[NoteService] Create: Note is null");
                 return new Result<Notes>(null, Common.Enums.StatusCode.BAD_REQUEST);
             }
-
-            //var user = await _userContext.Users.Where(a => a.UserName == _user.Name).FirstOrDefaultAsync();
-            //if (user == null) {
-            //    _logger.LogWarning("Note.Create: No user found in the data store");
-            //    return new Result<IResult>(null, Common.Enums.StatusCode.BAD_REQUEST);
-            //}
 
             var now = DateTimeOffset.UtcNow;
             note.User = _user.Name;
@@ -100,12 +88,6 @@ namespace VueServer.Services.Concrete
                 _logger.LogWarning("[NoteService] Update: Note is null");
                 return new Result<Notes>(null, Common.Enums.StatusCode.BAD_REQUEST);
             }
-
-            //var user = await _userContext.Users.Where(a => a.UserName == _user.Name).FirstOrDefaultAsync();
-            //if (user == null) {
-            //    _logger.LogWarning("Note.Update: No user found in the data store");
-            //    return new Result<IResult>(null, Common.Enums.StatusCode.BAD_REQUEST);
-            //}
 
             var updated = await _wsContext.Notes.Where(a => a.Id == note.Id && a.User == _user.Name).FirstOrDefaultAsync();
             if (updated == null) {

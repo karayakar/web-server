@@ -17,8 +17,8 @@ namespace VueServer.Services.Concrete
 
         public FileServerService (ILoggerFactory logger, IUserService user)
         {
-            _logger = logger.CreateLogger<FileServerService>();
-            _user = user;
+            _logger = logger?.CreateLogger<FileServerService>() ?? throw new ArgumentNullException("Logger factory is null");
+            _user = user ?? throw new ArgumentNullException("User service is null");
         }
 
         public IResult<string[]> GetFiles (string webrootPath)

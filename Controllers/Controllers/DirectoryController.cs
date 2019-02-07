@@ -22,8 +22,8 @@ namespace VueServer.Controllers
             IStatusCodeFactory<IActionResult> codeFactory,
             IDirectoryService service)
         {
-            _codeFactory = codeFactory;
-            _service = service;
+            _codeFactory = codeFactory ?? throw new ArgumentNullException("Code factory is null");
+            _service = service ?? throw new ArgumentNullException("Directory service is null");
         }
 
         [HttpGet]
